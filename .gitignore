@@ -1,0 +1,13 @@
+# Ignore all files in the 'docs' folder
+docs/
+
+# Ignore all markdown files (*.md)
+*.md
+
+# Ignore all zip files (*.zip)
+*.zip
+
+# Optionally, ignore the 'tests' folder and the 'test-page.html' file
+# if they contain non-essential test artifacts
+tests/
+test-page.html

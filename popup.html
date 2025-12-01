@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureAuth - Dashboard</title>
+  <link rel="stylesheet" href="styles/popup.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <img src="icons/icon48.png" alt="SecureAuth Logo">
+        <h1>SecureAuth</h1>
+      </div>
+      <div class="status-indicator">
+        <span class="status-dot active"></span>
+        <span class="status-text">Protected</span>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Statistics Section -->
+      <section class="stats-section">
+        <h2>Protection Statistics</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blocked">🛡️</div>
+            <div class="stat-content">
+              <div class="stat-value" id="blocked-count">0</div>
+              <div class="stat-label">Threats Blocked</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon scans">🔍</div>
+            <div class="stat-content">
+              <div class="stat-value" id="scan-count">0</div>
+              <div class="stat-label">Sites Scanned</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon warnings">⚠️</div>
+            <div class="stat-content">
+              <div class="stat-value" id="warning-count">0</div>
+              <div class="stat-label">Warnings Shown</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Activity Section -->
+      <section class="activity-section">
+        <h2>Recent Blocked Attempts</h2>
+        <div id="recent-activity" class="activity-list">
+          <div class="empty-state">
+            <p>No threats detected yet. SecureAuth is actively protecting you!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Actions -->
+      <section class="actions-section">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+          <button id="view-history-btn" class="action-btn">
+            <span class="btn-icon">📋</span>
+            View Full History
+          </button>
+          <button id="settings-btn" class="action-btn">
+            <span class="btn-icon">⚙️</span>
+            Settings
+          </button>
+          <button id="clear-history-btn" class="action-btn secondary">
+            <span class="btn-icon">🗑️</span>
+            Clear History
+          </button>
+        </div>
+      </section>
+
+      <!-- Information Section -->
+      <section class="info-section">
+        <h3>How SecureAuth Protects You</h3>
+        <ul class="feature-list">
+          <li>
+            <span class="feature-icon">🔒</span>
+            <span>Multi-signal phishing detection</span>
+          </li>
+          <li>
+            <span class="feature-icon">🌐</span>
+            <span>Domain reputation analysis</span>
+          </li>
+          <li>
+            <span class="feature-icon">🔐</span>
+            <span>Breach password detection (HIBP)</span>
+          </li>
+          <li>
+            <span class="feature-icon">⚡</span>
+            <span>Real-time protection</span>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>SecureAuth v1.0.0 | <a href="#" id="about-link">About</a> | <a href="#" id="help-link">Help</a></p>
+    </footer>
+  </div>
+
+  <!-- History Modal -->
+  <div id="history-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Blocked Attempts History</h2>
+        <button class="close-btn" id="close-history-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="history-list" class="history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="close-btn" id="close-settings-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-section">
+          <h3>Protection Settings</h3>
+          <div class="setting-item">
+            <label for="enable-protection">
+              <input type="checkbox" id="enable-protection" checked>
+              Enable Real-time Protection
+            </label>
+          </div>
+          <div class="setting-item">
+            <label for="enable-notifications">
+              <input type="checkbox" id="enable-notifications" checked>
+              Show Notifications
+            </label>
+          </div>
+          <div class="setting-item">
+            <label for="enable-hibp">
+              <input type="checkbox" id="enable-hibp" checked>
+              Check Passwords with HIBP API
+            </label>
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h3>Detection Sensitivity</h3>
+          <div class="setting-item">
+            <label for="sensitivity">
+              Risk Threshold:
+              <select id="sensitivity">
+                <option value="low">Low (More Warnings)</option>
+                <option value="medium" selected>Medium (Recommended)</option>
+                <option value="high">High (Fewer Warnings)</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Privacy</h3>
+          <p class="privacy-note">
+            SecureAuth uses the Have I Been Pwned API with k-anonymity to check passwords without exposing them. 
+            Only the first 5 characters of a hashed password are sent over the network.
+          </p>
+        </div>
+
+        <div class="modal-footer">
+          <button id="save-settings-btn" class="btn-primary">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div id="about-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>About SecureAuth</h2>
+        <button class="close-btn" id="close-about-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="about-content">
+          <h3>SecureAuth v1.0.0</h3>
+          <p>A multi-factor authentication phishing resilience tool</p>
+          
+          <h4>Development Team</h4>
+          <ul class="team-list">
+            <li>Aina Aroob (22l-8221)</li>
+            <li>Hafsa Feroze (22l-6636)</li>
+            <li>Ali Kamal (22l-6817)</li>
+            <li>Amaz Ahmad (22l-6837)</li>
+          </ul>
+
+          <h4>Technologies Used</h4>
+          <ul class="tech-list">
+            <li>Browser Extension APIs (Manifest V3)</li>
+            <li>Have I Been Pwned API</li>
+            <li>SHA-1 Hashing with k-Anonymity</li>
+            <li>Multi-signal Threat Detection</li>
+          </ul>
+
+          <h4>Project Category</h4>
+          <p>Application Security & Identity and Trust Management</p>
+
+          <div class="links">
+            <a href="https://github.com/Amaz51/secureauth" target="_blank">GitHub Repository</a>
+            <a href="https://haveibeenpwned.com/" target="_blank">HIBP API</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
